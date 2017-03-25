@@ -69,6 +69,8 @@ def process_ipynb(name, outpath=None, res_path=None, clean=False, meta=None):
             outpath='.'
     if res_path is None:
         res_path=outpath+'/images'
+    else:
+        res_path=outpath+'/'+res_path
     if clean:
         rmcmd="rm {0}/{2}-output* {1}/{2}.md".format(res_path, outpath, name)
         print(rmcmd)
@@ -91,7 +93,7 @@ def process_ipynb(name, outpath=None, res_path=None, clean=False, meta=None):
         with open(mdpath, "w") as md_file:
             md_file.write(
                 md.replace(
-                    '](output_', ']({{attach}}/{}{}{}-output_'.format(outpath, res_path, name)
+                    '](output_', ']({{attach}}/{}/{}-output_'.format(os.path.split(res_path)[-1], name)
                 ).lstrip()
             )
         print('Wrote {}!'.format(mdpath))
