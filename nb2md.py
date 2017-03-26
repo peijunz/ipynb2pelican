@@ -2,6 +2,8 @@
 import json
 from nbconvert import export_markdown
 import os
+def ipynb2md(fname):
+    export_markdown(fname)
 def setmetadata(fname, meta):
     '''Extract Metadata from the first ipython notebook cell
     and return the ipynb json object
