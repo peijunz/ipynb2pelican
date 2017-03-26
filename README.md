@@ -50,3 +50,12 @@ MARKUP = ('md', 'ipynb')
 PLUGIN_PATH = 'pelican-plugins'
 PLUGINS = ['pelican-plugins']
 ```
+## TODO
++ Support `#ignore` tag in python code cell by preprocessor
++ More strict MetaCell Check
++ Preprocessor list
++ Summary Generation?
++ Fix the inperfect environment support?
+
+## Acknowledgement
+Thanks to [pelican-ipynb](https://github.com/danielfrg/pelican-ipynb)! From reading the code of the project, I have learned how to write a similiar plugin with my own ideas.
