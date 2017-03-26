@@ -1,8 +1,7 @@
 from pelican import signals
-from traitlets.config import Config
 from nbconvert import HTMLExporter
-import io
 from pelican.readers import BaseReader
+
 from .preprocess import *
 from .math import LATEX_CUSTOM_SCRIPT
 
