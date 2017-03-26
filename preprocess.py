@@ -7,6 +7,14 @@ class RemoveEmptyCells(Preprocessor):
         )
         return nb, resources
 
+class IgnoreCells(Preprocessor):
+    '''Ignore Cells with #ignore tag in the beginning'''
+    def preprocess(self, nb, resources):
+        nb.cells=list(
+            filter(lambda c:c['source'].startswith('#ignore'), nb.cells)
+        )
+        return nb, resources
+
 class FirstCellMeta(Preprocessor):
     '''Get metadata'''
     data=dict()
@@ -29,3 +37,4 @@ class FirstCellMeta(Preprocessor):
         self.setmeta(nb.cells[0]['source'])
         nb.cells = nb.cells[1:]
         return nb, resources
+pres=[RemoveEmptyCells, FirstCellMeta]

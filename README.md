@@ -8,6 +8,7 @@ The plugin is simple and powerful:
 + Math in ipynb is supported
 + Great solution for metadata
 + You can change `preprocessor.py` and use your own preprocessors
++ Change `pres` in [precessors.py]() to enable `#ignore` filter
 
 ## MetaCell
 
@@ -51,10 +52,8 @@ PLUGIN_PATH = 'pelican-plugins'
 PLUGINS = ['pelican-plugins']
 ```
 ## TODO
-+ Support `#ignore` tag in python code cell by preprocessor
 + More strict MetaCell Check
-+ Preprocessor list
-+ Summary Generation?
++ Summary Generation? Using nbconvert and covert it to markdown as summary?
 + Fix the inperfect environment support?
 
 ## Acknowledgement
