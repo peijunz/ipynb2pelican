@@ -1,4 +1,6 @@
 from nbconvert.preprocessors import Preprocessor
+import re
+from ast import literal_eval
 
 class Metadata(Preprocessor):
     '''Extract Metadata from first cell. '''
@@ -30,21 +32,18 @@ class Metadata(Preprocessor):
         Metadata.data=dict()
         if Metadata.meta_cell(nb.cells[0]['source']):
             nb.cells = nb.cells[1:]
+        else:
+            raise Exception('')
         return nb, resources
 class SubCells(Preprocessor):
-    """A preprocessor to select a slice of the cells of a notebook
-    The subcell function is executed after Metadata preprocessor, so
-    0th Cell is the first cell after MetaCell
-    Read start and end from the metacell like:
-    + subcells: [5, 10]
-    """
+    """A preprocessor to select a slice of the cells of a notebook"""
     start = 0
     end = None
     @staticmethod
     def preprocess(nb, resources):
         # Get start/end from subcells metadata
         if 'subcells' in Metadata.data:
-            SubCells.start, SubCells.end=eval(Metadata.data['subcells'])
+            SubCells.start, SubCells.end=literal_eval(Metadata.data['subcells'])
         tmp=nb.cells[SubCells.start:SubCells.end]
         if tmp:
             nb.cells = tmp
@@ -56,10 +55,16 @@ class SubCells(Preprocessor):
 class RemoveEmpty(Preprocessor):
     '''Remove Empty Cells
     Tested'''
+    visible=re.compile('\S')
     @staticmethod
     def preprocess(nb, resources):
         nb.cells=list(
-            filter(lambda c:bool(c['source']), nb.cells)
+            filter(lambda c:re.match(
+                RemoveEmpty.visible, 
+                c['source']
+                )
+            , nb.cells
+            )
         )
         return nb, resources
 
