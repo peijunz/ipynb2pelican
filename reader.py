@@ -17,16 +17,17 @@ class ipynbReader(BaseReader):
     # A part of the code derived from pelican-ipynb
     enabled = True
     file_extensions = ['ipynb']
-
     def read(self, source_path):
         '''Parse content and metadata for ipynb files'''
-        assert(FirstCellMeta in pres)
         exporter = HTMLExporter(template_file='basic',
-                                preprocessors=pres)
+                                preprocessors=config_pres(self.settings))
         content, info = exporter.from_filename(source_path)
+        
+        # Math Support
         content=content+LATEX_CUSTOM_SCRIPT
         metadata={}
-        # Change to standard pelican metadata
-        for k,v in FirstCellMeta.data.items():
+        
+        # Change Metadata.data to standard pelican metadata
+        for k,v in Metadata.data.items():
             metadata[k]= self.process_metadata(k, v)
         return content, metadata
