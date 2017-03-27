@@ -1,29 +1,28 @@
-# Pelican Plugin for using MetaCell
+# [ipynb2pelican](https://github.com/peijunz/ipynb2pelican) Plugin
 
-This plugin provides markup for Jupyter/IPython notebooks in pelican, so `.ipynb` files are recognized as a valid filetype for an article. 
+The [ipynb2pelican](https://github.com/peijunz/ipynb2pelican) plugin provides markup for Jupyter/IPython notebooks in pelican, so `.ipynb` files are recognized as a valid filetype for an article. 
 
 ## MetaCell
-The project is inspired by [pelican-ipynb](https://github.com/danielfrg/pelican-ipynb), but do things the other way: MetaCell. 
+The project is inspired by [pelican-ipynb](https://github.com/danielfrg/pelican-ipynb), but do things the other way: MetaCell (i.e. Metadata Cell). 
 With MetaCell, there is NO need to create another metadata file, or edit ipynb externally. Everything is inside Jupyter Notebook!
 
-Exact Idea of MetaCell:
+Exact Idea of MetaCell is:
 
 > **All and Only** Metadata should be stored at the first Cell of ipynb
 
 Writing a MetaCell is as simple as writting metadata in markdown file.
-```
+```md
 # This is title
 + date: 2020-02-22
 + tags: [hello, world]
 ```
+> Hint: In jupyter notebook, press `Esc+M` will switch selected cell to markdown mode. 
 
-Thanks to the markdown capability of ipynb, MetaCell will be shown like the following:
+The `+` and space ` ` before any item will be automatically stripped out. If you don't like it, it's OK. But adding `+ ` will make metadata organized and enhance the readability of metacell:
+
 ### This is title
 + date: 2020-02-22
 + tags: [hello, world]
-
-So, MetaCell itself will even enhance the readability of your notebooks! 
-> Hint: In jupyter notebook, press `Esc+M` will switch selected cell to markdown mode. 
 
 ## Overview
 The plugin is simple:
@@ -40,7 +39,7 @@ But it is still powerful and extensible:
     - SubCell Selection
     - Ignore cells with `#ignore` tag
     - Empty Cell Removal
-+ You can change [preprocess.py]() and define your own preprocessors
++ You can change [preprocess.py](preprocess.py) and define your own preprocessors
 
 ## Preprocessors
 ### Metadata Extraction
@@ -49,7 +48,7 @@ As we stated, **All and Only** Metadata should be stored at the first Cell of ip
 ### SubCells Selection
 The Subcells preprocessor is executed after Metadata preprocessor (Th MetaCell it self will be removed by Metadata preprocessor), so
 **zeroth cell is the first cell after MetaCell**. The start and end should be written in the MetaCell like:
-```
+```md
 # This is title
 + date: 2020-02-22
 + tags: [hello, world]
@@ -78,9 +77,8 @@ Remove trivial cells without visible characters using regular expression `\S`
 Download this repo and put all the .py files it into an ipynb directory into your plugins directory.
 
 In the `pelicanconf.py`
-```
+```python
 MARKUP = ('md', 'ipynb')
-
 PLUGIN_PATH = 'pelican-plugins'
 PLUGINS = ['pelican-plugins']
 ```
@@ -93,7 +91,4 @@ PLUGINS = ['pelican-plugins']
 |IPYNB_SUBCELLS|True|Only preserve Subcells specified by `subcells: [begin, end)` metadata|
 
 ## TODO
-+ Fix the inperfect environment support?
-
-## Acknowledgement
-Thanks to [pelican-ipynb](https://github.com/danielfrg/pelican-ipynb)! From reading the code of the project, I have learned how to write a similiar plugin with my own ideas.
++ Bug for Math environment.
