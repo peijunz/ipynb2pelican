@@ -81,12 +81,12 @@ The value will be evaluated by `start, end = ast.literal_eval(value)`. And then 
 > Hint: If you want end to be infinity, use None
 
 
-## Installation
+## Installation and Configuration
 ### Dependency
 + Both `python2`, `python3` are supported
 + `pelican`
 + `jupyter`
-+ `ipython >= 4` should be OK.
++ `ipython`
 + `nbconvert`
 
 I have tested on
@@ -95,14 +95,30 @@ I have tested on
 + `pelican 3.7.1`
 + `jupyter/ipython/nbconvert 4.1`
 
-Download this repo and put files it into an `ipynb2pelican` directory into your plugins directory.
-
-In the `pelicanconf.py`
-```python
-MARKUP = ('md', 'ipynb')
-PLUGIN_PATH = 'path-to-your-pelican-plugins'
-PLUGINS = ['ipynb2pelican']
+Download this repo and rename folder to `ipynb2pelican`. Then put it
+into your plugins directory. If your plugins are put
+into `pelican-plugins` directory, the file tree
+should looks like:
+```
+content/
+pelicanconf.py
+pelican-plugins/
+└── ipynb2pelican
+    ├── __init__.py
+    ├── math.py
+    ├── preprocess.py
+    ├── reader.py
+    └── README.md
 ```
 
+And in the `pelicanconf.py`:
+```python
+MARKUP = ('md', 'ipynb')                # Add 'ipynb'
+PLUGIN_PATH = ['pelican-plugins']       # Ensure your plugin path is in it
+PLUGINS = ['ipynb2pelican']             # Name of the plugin
+IGNORE_FILES = ['.ipynb_checkpoints']   # Prevent parsing checkpoints files
+```
+
+If you are not using `pelican-plugins`, you should change it accordingly.
 ## TODO
 + Bug for Math environment.
