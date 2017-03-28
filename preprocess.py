@@ -6,34 +6,32 @@ class Metadata(Preprocessor):
     '''Extract Metadata from first cell. '''
     data={}
     @staticmethod
-    def meta_line(line):
-        if ':' in line:
-            key, val = line.split(': ', 1)
-            key=key.strip().lower()
-            val.strip()
-            if key:
-                Metadata.data[key]=val
-            return True
-        else:
-            return False
-    @staticmethod
     def meta_cell(cell):
         lines=cell.split('\n')
         if lines[0].startswith('# '):
             lines[0]='title: ' + lines[0][2:]
         lines=[l.lstrip("+ ") for l in lines]
-        for l in lines:
-            if not Metadata.meta_line(l):
+        for line in lines:
+            if ':' not in line:
                 data={}
+                return False
+            key, val = line.split(':', 1)
+            key=key.strip().lower()
+            val.strip()
+            if key:
+                Metadata.data[key]=val
+            else:
                 return False
         return True
     @staticmethod
     def preprocess(nb, resources):
-        Metadata.data=dict()
+        Metadata.data={}
         if Metadata.meta_cell(nb.cells[0]['source']):
             nb.cells = nb.cells[1:]
+            if not nb.cells:
+                raise Exception('No content cells after metadata extraction!')
         else:
-            raise Exception('')
+            raise Exception('Failure in metadata extraction!')
         return nb, resources
 class SubCells(Preprocessor):
     """A preprocessor to select a slice of the cells of a notebook"""
@@ -45,11 +43,9 @@ class SubCells(Preprocessor):
         if 'subcells' in Metadata.data:
             SubCells.start, SubCells.end = \
                 literal_eval(Metadata.data['subcells'])
-        tmp=nb.cells[SubCells.start:SubCells.end]
-        if tmp:
-            nb.cells = tmp
-        else:
-            raise Exception('Wrong Slicing Range!')
+        nb.cells=nb.cells[SubCells.start:SubCells.end]
+        if not nb.cells:
+            raise Exception('No content cells after SubCells!')
         return nb, resources
 
 class RemoveEmpty(Preprocessor):
@@ -60,6 +56,8 @@ class RemoveEmpty(Preprocessor):
     def preprocess(nb, resources):
         nb.cells=[cell for cell in nb.cells
                   if re.match(RemoveEmpty.visible, cell['source'])]
+        if not nb.cells:
+            raise Exception('No content cells after RemoveEmpty!')
         return nb, resources
 
 class IgnoreTag(Preprocessor):
@@ -69,11 +67,13 @@ class IgnoreTag(Preprocessor):
     def preprocess(nb, resources):
         nb.cells=[cell for cell in nb.cells
                   if not cell['source'].startswith('#ignore')]
+        if not nb.cells:
+            raise Exception('No content cells after IgnoreTag!')
         return nb, resources
 
-# Below is the configuration process
 class Preprocess:
-    # Precedence: Metadata > SubCells > IgnoreTag = RemoveEmpty
+    '''Configuration of preprocess
+    Precedence: Metadata > SubCells > IgnoreTag = RemoveEmpty'''
     pres=[('IPYNB_SUBCELLS', SubCells),
           ('IPYNB_IGNORE', IgnoreTag),
           ('IPYNB_REMOVE_EMPTY', RemoveEmpty),]
@@ -83,8 +83,7 @@ class Preprocess:
     enabled_prepros=[Metadata]
 
 def config_pres(setting):
-    ''''''
-    # Refresh preprocessor options by setting
+    '''Refresh preprocessor options by setting'''
     for key in Preprocess.options.keys():
         if key in setting:
             Preprocess.options[key]=setting[key]
