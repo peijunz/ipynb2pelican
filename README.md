@@ -34,6 +34,7 @@ But it is still powerful and extensible:
 
 + Math Support
 + A Solution for metadata
++ Syntax hightlight by nbconvert
 + Several configurable preprocessors provided
     - Metadata Extraction
     - SubCell Selection
@@ -42,10 +43,30 @@ But it is still powerful and extensible:
 + You can change [preprocess.py](preprocess.py) and define your own preprocessors
 
 ## Preprocessors
+Thanks the preprocessor feature of nbconvert, I have defined some useful
+preprocessor with on/off options.
+
+In your `pelicanconf.py`, set following options to toggle preprocessors.
+
+|Option Variable|Default|Meaning|
+|------|-------|-------|
+|IPYNB_REMOVE_EMPTY|True|Remove Empty Cells|
+|IPYNB_IGNORE|True|Remove cells with `#ignore` tag at the beginning|
+|IPYNB_SUBCELLS|True|Only preserve Subcells specified by `subcells: [begin, end)` metadata|
+
 ### Metadata Extraction
 As we stated, **All and Only** Metadata should be stored at the first Cell of ipynb. If there is non-metadata content found, it will raise an exception. After the extraction of metadata, the **MetaCell will be removed**, as we have extracted all the information. 
 
-### SubCells Selection
+### Remove Empty Cells `IPYNB_REMOVE_EMPTY`
+Remove trivial cells without visible characters using regular expression `\S`
+
+### #ignore Tag `IPYNB_IGNORE`
+You can include an `#ignore` comment at the beginning
+of a cell of the Jupyter notebook to ignore it, removing it from the post content.
+
+Note it is more strict than `#ignore` tag in pelican-ipynb. The purpose is to prevent kicking normal contents out of post content.
+
+### SubCells Selection `IPYNB_SUBCELLS`
 The Subcells preprocessor is executed after Metadata preprocessor (Th MetaCell it self will be removed by Metadata preprocessor), so
 **zeroth cell is the first cell after MetaCell**. The start and end should be written in the MetaCell like:
 ```md
@@ -59,13 +80,6 @@ The value will be evaluated by `start, end = ast.literal_eval(value)`. And then 
 
 > Hint: If you want end to be infinity, use None
 
-### #ignore Tag
-You can include an `#ignore` comment at the beginning
-of a cell of the Jupyter notebook to ignore it, removing it from the post content.
-
-Note it is more strict than `#ignore` tag in pelican-ipynb. The purpose is to prevent kicking normal contents out of post content.
-### Remove Empty Cells
-Remove trivial cells without visible characters using regular expression `\S`
 
 ## Installation
 ### Dependency
@@ -89,13 +103,6 @@ MARKUP = ('md', 'ipynb')
 PLUGIN_PATH = 'path-to-your-pelican-plugins'
 PLUGINS = ['ipynb2pelican']
 ```
-
-## Options
-|Option|Default|Meaning|
-|------|-------|-------|
-|IPYNB_REMOVE_EMPTY|True|Remove Empty Cells, `True` by default|
-|IPYNB_IGNORE|True|Remove cells with `#ignore` tag at the beginning|
-|IPYNB_SUBCELLS|True|Only preserve Subcells specified by `subcells: [begin, end)` metadata|
 
 ## TODO
 + Bug for Math environment.
