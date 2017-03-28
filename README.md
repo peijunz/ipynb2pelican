@@ -46,7 +46,7 @@ But it is still powerful and extensible:
 Thanks the preprocessor feature of nbconvert, I have defined some useful
 preprocessor with on/off options.
 
-In your `pelicanconf.py`, set following options to toggle preprocessors.
+In your `pelicanconf.py`, set following options to toggle preprocessors. Don't worry about preprocessors, switch off all options will NOT have discernable gain on performance. So they are enabled by default.
 
 |Option Variable|Default|Meaning|
 |------|-------|-------|
