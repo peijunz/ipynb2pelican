@@ -43,12 +43,12 @@ class SubCells(Preprocessor):
     def preprocess(nb, resources):
         # Get start/end from subcells metadata
         if 'subcells' in Metadata.data:
-            SubCells.start, SubCells.end=literal_eval(Metadata.data['subcells'])
+            SubCells.start, SubCells.end = \
+                literal_eval(Metadata.data['subcells'])
         tmp=nb.cells[SubCells.start:SubCells.end]
         if tmp:
             nb.cells = tmp
         else:
-            #print(SubCells.start, SubCells.end, tmp)
             raise Exception('Wrong Slicing Range!')
         return nb, resources
 
@@ -58,14 +58,8 @@ class RemoveEmpty(Preprocessor):
     visible=re.compile('\S')
     @staticmethod
     def preprocess(nb, resources):
-        nb.cells=list(
-            filter(lambda c:re.match(
-                RemoveEmpty.visible, 
-                c['source']
-                )
-            , nb.cells
-            )
-        )
+        nb.cells=[cell for cell in nb.cells
+                  if re.match(RemoveEmpty.visible, cell['source'])]
         return nb, resources
 
 class IgnoreTag(Preprocessor):
@@ -73,12 +67,8 @@ class IgnoreTag(Preprocessor):
     Tested'''
     @staticmethod
     def preprocess(nb, resources):
-        nb.cells=list(
-            filter(
-                lambda cell: not (cell['source'].startswith('#ignore')),
-                nb.cells
-                )
-        )
+        nb.cells=[cell for cell in nb.cells
+                  if not cell['source'].startswith('#ignore')]
         return nb, resources
 
 # Below is the configuration process
@@ -88,8 +78,8 @@ class Preprocess:
           ('IPYNB_IGNORE', IgnoreTag),
           ('IPYNB_REMOVE_EMPTY', RemoveEmpty),]
     options={'IPYNB_REMOVE_EMPTY': True,
-                 'IPYNB_IGNORE': True,
-                 'IPYNB_SUBCELLS': True,}
+            'IPYNB_IGNORE': True,
+            'IPYNB_SUBCELLS': True,}
     enabled_prepros=[Metadata]
 
 def config_pres(setting):
@@ -102,6 +92,3 @@ def config_pres(setting):
         if Preprocess.options[opt]:
             Preprocess.enabled_prepros.append(pre)
     return Preprocess.enabled_prepros
-if __name__=="__main__":
-    import doctest
-    

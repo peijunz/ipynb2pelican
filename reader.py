@@ -10,7 +10,7 @@ def register():
     Register the new "ipynb" reader
     """
     def add_reader(arg):
-        arg.settings["READERS"]["ipynb"] = IPythonNB
+        arg.settings["READERS"]["ipynb"] = ipynbReader
     signals.initialized.connect(add_reader)
 
 class ipynbReader(BaseReader):

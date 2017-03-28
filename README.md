@@ -69,18 +69,25 @@ Remove trivial cells without visible characters using regular expression `\S`
 
 ## Installation
 ### Dependency
-+ Currently works for `python3` only
-+ pelican
-+ nbconvert
-+ jupyter
-+ ipython
-Download this repo and put all the .py files it into an ipynb directory into your plugins directory.
++ Both `python2`, `python3` are supported
++ `pelican`
++ `jupyter`
++ `ipython >= 4` should be OK.
++ `nbconvert`
+
+I have tested on
+
++ `python 2.7/3.6`
++ `pelican 3.7.1`
++ `jupyter/ipython/nbconvert 4.1`
+
+Download this repo and put files it into an `ipynb2pelican` directory into your plugins directory.
 
 In the `pelicanconf.py`
 ```python
 MARKUP = ('md', 'ipynb')
-PLUGIN_PATH = 'pelican-plugins'
-PLUGINS = ['pelican-plugins']
+PLUGIN_PATH = 'path-to-your-pelican-plugins'
+PLUGINS = ['ipynb2pelican']
 ```
 
 ## Options
