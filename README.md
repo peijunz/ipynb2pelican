@@ -14,7 +14,7 @@ Writing a MetaCell is as simple as writting metadata in markdown file.
 ```md
 # This is title
 + date: 2020-02-22
-+ tags: [hello, world]
++ tags: hello, world
 ```
 > Hint: In jupyter notebook, press `Esc+M` will switch selected cell to markdown mode. 
 
@@ -22,7 +22,7 @@ The `+` and space ` ` before any item will be automatically stripped out. If you
 
 ### This is title
 + date: 2020-02-22
-+ tags: [hello, world]
++ tags: hello, world
 
 ## Overview
 The plugin is simple:
@@ -72,7 +72,7 @@ The Subcells preprocessor is executed after Metadata preprocessor (Th MetaCell i
 ```md
 # This is title
 + date: 2020-02-22
-+ tags: [hello, world]
++ tags: hello, world
 + subcells: [5, -1]
 ```
 
