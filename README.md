@@ -95,8 +95,15 @@ I have tested on
 + `pelican 3.7.1`
 + `jupyter/ipython/nbconvert 4.1`
 
+### Installation
 Download this repo and rename folder to `ipynb2pelican`. Then put it
-into your plugins directory. If your plugins are put
+into your plugins directory. A simpler way is by submodule this plugin:
+
+```sh
+git submodule add git@github.com:peijunz/ipynb2pelican.git pelican-plugins/ipynb2pelican
+```
+
+If your plugins are put
 into `pelican-plugins` directory, the file tree
 should looks like:
 ```
@@ -110,8 +117,8 @@ pelican-plugins/
     ├── reader.py
     └── README.md
 ```
-
-And in the `pelicanconf.py`:
+### Configuration
+In the `pelicanconf.py`:
 ```python
 MARKUP = ('md', 'ipynb')                # Add 'ipynb'
 PLUGIN_PATH = ['pelican-plugins']       # Ensure your plugin path is in it
