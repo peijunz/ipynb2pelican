@@ -88,7 +88,7 @@ class Preprocess:
 
 def config_pres(setting):
     '''Refresh preprocessor options by setting'''
-    Metadata.md=Markdown(**self.settings['MARKDOWN'])
+    Metadata.md=Markdown(**setting['MARKDOWN'])
     for key in Preprocess.options.keys():
         if key in setting:
             Preprocess.options[key]=setting[key]
