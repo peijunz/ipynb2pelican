@@ -1,10 +1,12 @@
 from nbconvert.preprocessors import Preprocessor
 import re
 from ast import literal_eval
+from markdown import Markdown
 
 class Metadata(Preprocessor):
     '''Extract Metadata from first cell. '''
     data={}
+    md=None
     @staticmethod
     def meta_cell(cell):
         lines=cell.split('\n')
@@ -17,7 +19,7 @@ class Metadata(Preprocessor):
                 return False
             key, val = line.split(':', 1)
             key=key.strip().lower()
-            val.strip()
+            val=val.strip()
             if key:
                 Metadata.data[key]=val
             else:
@@ -32,6 +34,8 @@ class Metadata(Preprocessor):
                 raise Exception('No content cells after metadata extraction!')
         else:
             raise Exception('Failure in metadata extraction!')
+        if 'summary' in Metadata.data:
+            Metadata.data['summary']=md.convert(Metadata.data['summary'])
         return nb, resources
 class SubCells(Preprocessor):
     """A preprocessor to select a slice of the cells of a notebook"""
@@ -84,6 +88,7 @@ class Preprocess:
 
 def config_pres(setting):
     '''Refresh preprocessor options by setting'''
+    Metadata.md=Markdown(**self.settings['MARKDOWN'])
     for key in Preprocess.options.keys():
         if key in setting:
             Preprocess.options[key]=setting[key]
