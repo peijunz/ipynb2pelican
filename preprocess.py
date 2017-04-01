@@ -35,7 +35,7 @@ class Metadata(Preprocessor):
         else:
             raise Exception('Failure in metadata extraction!')
         if 'summary' in Metadata.data:
-            Metadata.data['summary']=md.convert(Metadata.data['summary'])
+            Metadata.data['summary']=Metadata.md.convert(Metadata.data['summary'])
         return nb, resources
 class SubCells(Preprocessor):
     """A preprocessor to select a slice of the cells of a notebook"""
