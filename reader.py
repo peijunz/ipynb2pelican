@@ -3,10 +3,8 @@ from nbconvert import HTMLExporter
 from pelican.readers import BaseReader
 
 from .preprocess import *
-try:
-    from .math_user import LATEX_CUSTOM_SCRIPT
-except:
-    from .math import LATEX_CUSTOM_SCRIPT
+from .math import LATEX_CUSTOM_SCRIPT
+
 def register():
     """
     Register the new "ipynb" reader

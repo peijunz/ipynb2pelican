@@ -1,3 +1,4 @@
+# Copied from pelican-ipynb project
 LATEX_CUSTOM_SCRIPT = """
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var mathjaxscript = document.createElement('script');
