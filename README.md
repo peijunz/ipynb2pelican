@@ -46,8 +46,8 @@ But it is still powerful and extensible:
 Thanks to the preprocessor feature of nbconvert, I have defined some useful
 preprocessor with on/off options. In your `pelicanconf.py`, you are able to
 set [options](#options) to toggle preprocessors. Don't worry about preprocessors, switch
-off all options will NOT have discernable gain on performance. So they are
-enabled by default. 
+off all options will have only 3% gain on performance according to the test on my blog. So
+all of them are enabled by default.
 
 ### Metadata Extraction
 As we stated, **All and Only** Metadata should be stored at the first Cell of ipynb. If there is non-metadata content found, it will raise an exception. After the extraction of metadata, the **MetaCell will be removed**, as we have extracted all the information. 

@@ -2,7 +2,7 @@ from pelican import signals
 from nbconvert import HTMLExporter
 from pelican.readers import BaseReader
 
-from .preprocess import *
+from .preprocess import config_pres, Metadata
 from .math import config_mathjax
 
 def register():
@@ -24,7 +24,7 @@ class ipynbReader(BaseReader):
         content, info = exporter.from_filename(source_path)
         
         # Math Support
-        content=content + config_mathjax(self.settings)
+        content += config_mathjax(self.settings)
         metadata={}
         
         # Change Metadata.data to standard pelican metadata

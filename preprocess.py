@@ -1,7 +1,7 @@
 from nbconvert.preprocessors import Preprocessor
 import re
-from ast import literal_eval
-from markdown import Markdown
+import ast
+import markdown
 
 class Metadata(Preprocessor):
     '''Extract Metadata from first cell. '''
@@ -46,7 +46,7 @@ class SubCells(Preprocessor):
         # Get start/end from subcells metadata
         if 'subcells' in Metadata.data:
             SubCells.start, SubCells.end = \
-                literal_eval(Metadata.data['subcells'])
+                ast.literal_eval(Metadata.data['subcells'])
         nb.cells=nb.cells[SubCells.start:SubCells.end]
         if not nb.cells:
             raise Exception('No content cells after SubCells!')
@@ -75,24 +75,23 @@ class IgnoreTag(Preprocessor):
             raise Exception('No content cells after IgnoreTag!')
         return nb, resources
 
-class Preprocess:
-    '''Configuration of preprocess
-    Precedence: Metadata > SubCells > IgnoreTag = RemoveEmpty'''
-    pres=[('IPYNB_SUBCELLS', SubCells),
-          ('IPYNB_IGNORE', IgnoreTag),
-          ('IPYNB_REMOVE_EMPTY', RemoveEmpty),]
-    options={'IPYNB_REMOVE_EMPTY': True,
-            'IPYNB_IGNORE': True,
-            'IPYNB_SUBCELLS': True,}
-    enabled_prepros=[Metadata]
-
+pres=[('IPYNB_SUBCELLS', SubCells),
+      ('IPYNB_IGNORE', IgnoreTag),
+      ('IPYNB_REMOVE_EMPTY', RemoveEmpty),]
+default_options={'IPYNB_REMOVE_EMPTY': True,
+                       'IPYNB_IGNORE': True,
+                     'IPYNB_SUBCELLS': True,}
 def config_pres(setting):
-    '''Refresh preprocessor options by setting'''
-    Metadata.md=Markdown(**setting['MARKDOWN'])
-    for key in Preprocess.options.keys():
+    '''Configuration of preprocess
+    Precedence: Metadata > SubCells > IgnoreTag = RemoveEmpty
+    Refresh preprocessor options by setting'''
+    Metadata.md=markdown.Markdown(**setting['MARKDOWN'])
+    preprocessors= [Metadata]
+    options=default_options.copy()
+    for key in options.keys():
         if key in setting:
-            Preprocess.options[key]=setting[key]
-    for opt, pre in Preprocess.pres:
-        if Preprocess.options[opt]:
-            Preprocess.enabled_prepros.append(pre)
-    return Preprocess.enabled_prepros
+            options[key]=setting[key]
+    for opt, pre in pres:
+        if options[opt]:
+            preprocessors.append(pre)
+    return preprocessors
