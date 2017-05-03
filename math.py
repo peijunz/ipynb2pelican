@@ -4,7 +4,7 @@ LATEX_CUSTOM_SCRIPT = """
     var mathjaxscript = document.createElement('script');
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript.src = 'MATHJAX_CDN?config=TeX-AMS-MML_HTMLorMML';
     mathjaxscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
@@ -30,3 +30,10 @@ LATEX_CUSTOM_SCRIPT = """
 }
 </script>
 """
+def config_mathjax(setting):
+    key="MATHJAX_CDN"
+    if key in setting:
+        cdn=setting[key]
+    else:
+        cdn='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js'
+    return LATEX_CUSTOM_SCRIPT.replace(key, cdn)

@@ -43,16 +43,11 @@ But it is still powerful and extensible:
 + You can change [preprocess.py](preprocess.py) and define your own preprocessors
 
 ## Preprocessors
-Thanks the preprocessor feature of nbconvert, I have defined some useful
-preprocessor with on/off options.
-
-In your `pelicanconf.py`, set following options to toggle preprocessors. Don't worry about preprocessors, switch off all options will NOT have discernable gain on performance. So they are enabled by default.
-
-|Option Variable|Default|Meaning|
-|------|-------|-------|
-|IPYNB_REMOVE_EMPTY|True|Remove Empty Cells|
-|IPYNB_IGNORE|True|Remove cells with `#ignore` tag at the beginning|
-|IPYNB_SUBCELLS|True|Only preserve Subcells specified by `subcells: [begin, end)` metadata|
+Thanks to the preprocessor feature of nbconvert, I have defined some useful
+preprocessor with on/off options. In your `pelicanconf.py`, you are able to
+set [options](#options) to toggle preprocessors. Don't worry about preprocessors, switch
+off all options will NOT have discernable gain on performance. So they are
+enabled by default. 
 
 ### Metadata Extraction
 As we stated, **All and Only** Metadata should be stored at the first Cell of ipynb. If there is non-metadata content found, it will raise an exception. After the extraction of metadata, the **MetaCell will be removed**, as we have extracted all the information. 
@@ -80,6 +75,14 @@ The value will be evaluated by `start, end = ast.literal_eval(value)`. And then 
 
 > Hint: If you want end to be infinity, use None
 
+## Options
+
+|Option Variable|Default|Meaning|
+|------|-------|-------|
+|IPYNB_REMOVE_EMPTY|True|Remove Empty Cells|
+|IPYNB_IGNORE|True|Remove cells with `#ignore` tag at the beginning|
+|IPYNB_SUBCELLS|True|Only preserve Subcells specified by `subcells: [begin, end)` metadata|
+|MATHJAX_CDN|[cdnjs](https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js)|The CDN of Mathjax to use|
 
 ## Installation and Configuration
 ### Dependency
