@@ -1,5 +1,5 @@
 # Copied from pelican-ipynb project
-LATEX_CUSTOM_SCRIPT = """
+MATH_SCRIPT = """\
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var mathjaxscript = document.createElement('script');
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
@@ -30,10 +30,16 @@ LATEX_CUSTOM_SCRIPT = """
 }
 </script>
 """
+cdn = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js'
+cached_mathjax = False
+
+
 def config_mathjax(setting):
-    key="MATHJAX_CDN"
-    if key in setting:
-        cdn=setting[key]
-    else:
-        cdn='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js'
-    return LATEX_CUSTOM_SCRIPT.replace(key, cdn)
+    global cached_mathjax, MATH_SCRIPT, cdn
+    if not cached_mathjax:
+        key = "MATHJAX_CDN"
+        if key in setting:
+            cdn = setting[key]
+        MATH_SCRIPT = MATH_SCRIPT.replace(key, cdn)
+        cached_mathjax = True
+    return MATH_SCRIPT
