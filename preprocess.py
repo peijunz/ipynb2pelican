@@ -85,6 +85,7 @@ class IgnoreTag(Preprocessor):
             raise Exception('No content cells after IgnoreTag!')
         return nb, resources
 
+
 pres = [('IPYNB_SUBCELLS', SubCells),
         ('IPYNB_IGNORE', IgnoreTag),
         ('IPYNB_REMOVE_EMPTY', RemoveEmpty), ]

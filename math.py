@@ -38,7 +38,7 @@ def config_mathjax(setting):
     global cached_mathjax, MATH_SCRIPT, cdn
     if not cached_mathjax:
         key = "MATHJAX_CDN"
-        if key in setting:
+        if key in setting and setting[key]:
             cdn = setting[key]
         MATH_SCRIPT = MATH_SCRIPT.replace(key, cdn)
         cached_mathjax = True
