@@ -1,5 +1,7 @@
 # Copied from pelican-ipynb project
-MATH_SCRIPT = """\
+class Mathjax:
+    '''Math script toolkit'''
+    script = """\
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var mathjaxscript = document.createElement('script');
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
@@ -30,16 +32,16 @@ MATH_SCRIPT = """\
 }
 </script>
 """
-cdn = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js'
-cached_mathjax = False
+    cdn = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js'
+    cached = False
 
-
-def config_mathjax(setting):
-    global cached_mathjax, MATH_SCRIPT, cdn
-    if not cached_mathjax:
-        key = "MATHJAX_CDN"
-        if key in setting and setting[key]:
-            cdn = setting[key]
-        MATH_SCRIPT = MATH_SCRIPT.replace(key, cdn)
-        cached_mathjax = True
-    return MATH_SCRIPT
+    @staticmethod
+    def config(setting):
+        '''Return configured mathjax script'''
+        if not Mathjax.cached:
+            key = "MATHJAX_CDN"
+            if key in setting and setting[key]:
+                Mathjax.cdn = setting[key]
+            Mathjax.script = Mathjax.script.replace(key, Mathjax.cdn)
+            cached_mathjax = True
+        return Mathjax.script

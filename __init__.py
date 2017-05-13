@@ -1,1 +1,2 @@
-from .reader import *
+__all__ = ["reader"]
+from .reader import register, ipynbReader

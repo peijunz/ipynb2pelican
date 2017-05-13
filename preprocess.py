@@ -11,6 +11,7 @@ class Metadata(Preprocessor):
 
     @staticmethod
     def meta_cell(cell):
+        '''Process the first cell'''
         lines = cell.split('\n')
         if lines[0].startswith('# '):
             lines[0] = 'title: ' + lines[0][2:]
@@ -30,6 +31,7 @@ class Metadata(Preprocessor):
 
     @staticmethod
     def preprocess(nb, resources):
+        '''Process the notebook to extract metadata'''
         Metadata.data = {}
         if Metadata.meta_cell(nb.cells[0]['source']):
             nb.cells = nb.cells[1:]
@@ -50,7 +52,7 @@ class SubCells(Preprocessor):
 
     @staticmethod
     def preprocess(nb, resources):
-        # Get start/end from subcells metadata
+        '''Get start/end from subcells metadata'''
         if 'subcells' in Metadata.data:
             SubCells.start, SubCells.end = \
                 ast.literal_eval(Metadata.data['subcells'])
@@ -61,8 +63,7 @@ class SubCells(Preprocessor):
 
 
 class RemoveEmpty(Preprocessor):
-    '''Remove Empty Cells
-    Tested'''
+    '''Remove Empty Cells'''
     visible = re.compile('\S')
 
     @staticmethod
@@ -75,8 +76,7 @@ class RemoveEmpty(Preprocessor):
 
 
 class IgnoreTag(Preprocessor):
-    '''Ignore Cells with #ignore tag in the beginning
-    Tested'''
+    '''Ignore Cells with #ignore tag in the beginning'''
     @staticmethod
     def preprocess(nb, resources):
         nb.cells = [cell for cell in nb.cells
