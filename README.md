@@ -1,5 +1,4 @@
 # [ipynb2pelican](https://github.com/peijunz/ipynb2pelican) Plugin
-[![Code Issues](https://www.quantifiedcode.com/api/v1/project/59dbe1a3f1a6424187e5f199f98e7aaf/badge.svg)](https://www.quantifiedcode.com/app/project/59dbe1a3f1a6424187e5f199f98e7aaf)
 
 The [ipynb2pelican](https://github.com/peijunz/ipynb2pelican) plugin provides markup for Jupyter/IPython notebooks in pelican, so `.ipynb` files are recognized as a valid filetype for an article. 
 
