@@ -69,7 +69,7 @@ class RemoveEmpty(Preprocessor):
     @staticmethod
     def preprocess(nb, resources):
         nb.cells = [cell for cell in nb.cells
-                    if re.match(RemoveEmpty.visible, cell['source'])]
+                    if re.search(RemoveEmpty.visible, cell['source'])]
         if not nb.cells:
             raise Exception('No content cells after RemoveEmpty!')
         return nb, resources
