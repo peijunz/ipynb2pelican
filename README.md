@@ -10,7 +10,7 @@ Exact Idea of MetaCell is:
 
 > **All and Only** Metadata should be stored at the first Cell of ipynb
 
-Writing a MetaCell is as simple as writting metadata in markdown file.
+Writing a MetaCell is as simple as writing metadata in markdown file.
 ```md
 # This is title
 + date: 2020-02-22
@@ -18,7 +18,10 @@ Writing a MetaCell is as simple as writting metadata in markdown file.
 ```
 > Hint: In jupyter notebook, press `Esc+M` will switch selected cell to markdown mode. 
 
-The `+` and space ` ` before any item will be automatically stripped out. If you don't like it, it's OK. But adding `+ ` will make metadata organized and enhance the readability of metacell:
+It is recommended (but not required) to organize the metadata items
+with Markdown bullets (`+`, `-` or `*`).
+These will be stripped during metadata extraction,
+but it keeps the metadata cell nicely readable in the notebook, like this:
 
 ### This is title
 + date: 2020-02-22
