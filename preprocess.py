@@ -4,41 +4,45 @@ import ast
 import markdown
 
 
+class MetaDataExtractionFailure(Exception):
+    pass
+
+
 class Metadata(Preprocessor):
-    '''Extract Metadata from first cell. '''
+    """Preprocessor to extract metadata from first cell of notebook."""
     data = {}
     md = None
 
+    # Regex for 'key: value' syntax
+    key_value_regex = re.compile(
+        r'^\s*[*+-]?\s*(?P<key>[a-zA-Z]+)\s*:\s*(?P<value>.*)$')
+
     @staticmethod
-    def meta_cell(cell):
-        '''Process the first cell'''
-        lines = cell.split('\n')
-        if lines[0].startswith('# '):
-            lines[0] = 'title: ' + lines[0][2:]
-        lines = [l.lstrip("+ ") for l in lines]
+    def extract_cell_metadata(cell):
+        """Extract metadata from the given notebook cell source."""
+        # Convert Markdown title syntax to 'title:'
+        cell = re.sub(r'^#+\s*', 'title: ', cell, flags=re.MULTILINE)
+
+        # Extract metadata from key-value pairs in non-empty lines
+        lines = [line.strip() for line in cell.split('\n') if line.strip()]
+        metadata = {}
         for line in lines:
-            if ':' not in line:
-                data = {}
-                return False
-            key, val = line.split(':', 1)
-            key = key.strip().lower()
-            val = val.strip()
-            if key:
-                Metadata.data[key] = val
-            else:
-                return False
-        return True
+            match = Metadata.key_value_regex.match(line)
+            if not match:
+                raise MetaDataExtractionFailure(
+                    'Failed to extract metadata with {l!r}'.format(l=line))
+            key, value = match.group('key', 'value')
+            metadata[key.lower()] = value
+        return metadata
 
     @staticmethod
     def preprocess(nb, resources):
         '''Process the notebook to extract metadata'''
-        Metadata.data = {}
-        if Metadata.meta_cell(nb.cells[0]['source']):
-            nb.cells = nb.cells[1:]
-            if not nb.cells:
-                raise Exception('No content cells after metadata extraction!')
-        else:
-            raise Exception('Failure in metadata extraction!')
+        Metadata.data = Metadata.extract_cell_metadata(nb.cells[0]['source'])
+        nb.cells = nb.cells[1:]
+        if not nb.cells:
+            raise Exception('No content cells after metadata extraction!')
+
         if 'summary' in Metadata.data:
             Metadata.data['summary'] = Metadata.md.convert(
                 Metadata.data['summary'])
