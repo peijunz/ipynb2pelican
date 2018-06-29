@@ -32,7 +32,7 @@ class Mathjax:
 }
 </script>
 """
-    cdn = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/latest.js'
+    cdn = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js'
     cached = False
 
     @staticmethod
