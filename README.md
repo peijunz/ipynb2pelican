@@ -50,11 +50,13 @@ But it is still powerful and extensible:
 + You can change [preprocess.py](preprocess.py) and define your own preprocessors
 
 ## Preprocessors
-Thanks to the preprocessor feature of nbconvert, I have defined some useful
-preprocessor with on/off options. In your `pelicanconf.py`, you are able to
-set [options](#options) to toggle preprocessors. Don't worry about preprocessors, switch
-off all options will have only 3% gain on performance according to the test on my blog. So
-all of them are enabled by default.
+Thanks to the preprocessor feature of nbconvert, useful preprocessors are built in this
+project with on/off options. In your `pelicanconf.py`, you are able to
+set [options](#options) to toggle preprocessors. You are encouraged to [share your own
+preprocessors](https://github.com/peijunz/ipynb2pelican/wiki/Preprocessors)! 
+
+Don't worry about preprocessors, switch off all options will have only 3% gain on
+performance according to the test on my blog. So all of them are enabled by default.
 
 ### Metadata Extraction
 As we stated, **All and Only** Metadata should be stored at the first Cell of ipynb. If there is non-metadata content found, it will raise an exception. After the extraction of metadata, the **MetaCell will be removed**, as we have extracted all the information. 
@@ -99,7 +101,7 @@ The value will be evaluated by `start, end = ast.literal_eval(value)`. And then 
 + `ipython`
 + `nbconvert`
 
-I have tested on
+It has been tested on
 
 + `python 2.7/3.6`
 + `pelican 3.7.1`
@@ -137,5 +139,3 @@ IGNORE_FILES = ['.ipynb_checkpoints']   # Prevent parsing checkpoints files
 ```
 
 If you are not using `pelican-plugins`, you should change it accordingly.
-## TODO
-+ Bug for Math environment.
