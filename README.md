@@ -1,9 +1,10 @@
 # [ipynb2pelican](https://github.com/peijunz/ipynb2pelican) Plugin
 
-The [ipynb2pelican](https://github.com/peijunz/ipynb2pelican) plugin provides markup for Jupyter/IPython notebooks in pelican, so `.ipynb` files are recognized as a valid filetype for an article. 
+The [ipynb2pelican](https://github.com/peijunz/ipynb2pelican) plugin provides markup for Jupyter/IPython notebooks in pelican, so `.ipynb` files are recognized as a valid filetype for an article.
 
 ## MetaCell
-The project is inspired by [pelican-ipynb](https://github.com/danielfrg/pelican-ipynb), but do things the other way: MetaCell (i.e. Metadata Cell). 
+The project is a simple rewrite of [pelican-ipynb](https://github.com/danielfrg/pelican-ipynb), with MetaCell (MetadataCell) idea introduced. The idea is later adopted in danielfrg/pelican-ipynb#92.
+
 With MetaCell, there is NO need to create another metadata file, or edit ipynb externally. Everything is inside Jupyter Notebook!
 
 Exact Idea of MetaCell is:

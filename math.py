@@ -6,7 +6,8 @@ class Mathjax:
     var mathjaxscript = document.createElement('script');
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = 'MATHJAX_CDN?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript.src = 'MATHJAX_CDN';
+    mathjaxscript.src += 'MATHJAX_CONFIG';
     mathjaxscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
@@ -25,7 +26,6 @@ class Mathjax:
         "    }, " +
         "    'HTML-CSS': { " +
         " linebreaks: { automatic: true, width: '95% container' }, " +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
         "    } " +
         "}); ";
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
@@ -33,15 +33,18 @@ class Mathjax:
 </script>
 """
     cdn = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js'
+    conf = '?config=TeX-AMS-MML_HTMLorMML'
     cached = False
 
     @staticmethod
     def config(setting):
         '''Return configured mathjax script'''
         if not Mathjax.cached:
-            key = "MATHJAX_CDN"
-            if key in setting and setting[key]:
-                Mathjax.cdn = setting[key]
-            Mathjax.script = Mathjax.script.replace(key, Mathjax.cdn)
+            if "MATHJAX_CDN" in setting and setting["MATHJAX_CDN"]:
+                Mathjax.cdn = setting["MATHJAX_CDN"]
+            Mathjax.script = Mathjax.script.replace("MATHJAX_CDN", Mathjax.cdn)
+            if "MATHJAX_CONFIG" in setting and setting["MATHJAX_CONFIG"]:
+                Mathjax.conf = setting["MATHJAX_CONFIG"]
+            Mathjax.script = Mathjax.script.replace("MATHJAX_CONFIG", Mathjax.conf)
             cached_mathjax = True
         return Mathjax.script
