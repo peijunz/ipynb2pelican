@@ -61,6 +61,20 @@ performance according to the test on my blog. So all of them are enabled by defa
 ### Metadata Extraction
 As we stated, **All and Only** Metadata should be stored at the first Cell of ipynb. If there is non-metadata content found, it will raise an exception. After the extraction of metadata, the **MetaCell will be removed**, as we have extracted all the information. 
 
+#### Summary cell `IPYNB_SUMMARY_CELL`
+You could specify a jupyter cell as summary metadata of the article, which is useful in article lists. 
+The summary cell functionality is based on metadata `summarycell` in metacell. Its value tells which cell to use or do not use any cell.
+
+`IPYNB_SUMMARY_CELL` is __False__ by default
++ If `IPYNB_SUMMARY_CELL` is True, then the default value of `summarycell` metadata is 1, i.e. the cell following the metadata cell
++ If `IPYNB_SUMMARY_CELL` is False, then the default value of `summarycell` metadata is 0, i.e. disabled
+
+Use summary cell is super easy, just specify `summarycell` metadata into your metacell like this:
+```
++ summarycell: value
+```
+If value is not specified, then it is taken as 1.
+
 ### Remove Empty Cells `IPYNB_REMOVE_EMPTY`
 Remove trivial cells without visible characters using regular expression `\S`
 
@@ -91,6 +105,7 @@ The value will be evaluated by `start, end = ast.literal_eval(value)`. And then 
 |IPYNB_REMOVE_EMPTY|True|Remove Empty Cells|
 |IPYNB_IGNORE|True|Remove cells with `#ignore` tag at the beginning|
 |IPYNB_SUBCELLS|True|Only preserve Subcells specified by `subcells: [begin, end)` metadata|
+|IPYNB_SUMMARY_CELL|False|If `summarycell` is not in metadata, use first cell as summarycell|
 |MATHJAX_CDN|[cdnjs](https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js)|The CDN of Mathjax to use|
 
 ## Installation and Configuration

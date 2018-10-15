@@ -12,7 +12,7 @@ class Metadata(Preprocessor):
     """Preprocessor to extract metadata from first cell of notebook."""
     data = {}
     md = None
-
+    summary_cell = False
     # Regex for 'key: value' syntax
     key_value_regex = re.compile(
         r'^\s*[*+-]?\s*(?P<key>[a-zA-Z]+)\s*:\s*(?P<value>.*)$')
@@ -32,7 +32,7 @@ class Metadata(Preprocessor):
                 raise MetaDataExtractionFailure(
                     'Failed to extract metadata with {l!r}'.format(l=line))
             key, value = match.group('key', 'value')
-            metadata[key.lower()] = value
+            metadata[key.lower()] = value.strip()
         return metadata
 
     @staticmethod
@@ -46,6 +46,20 @@ class Metadata(Preprocessor):
         if 'summary' in Metadata.data:
             Metadata.data['summary'] = Metadata.md.convert(
                 Metadata.data['summary'])
+        if Metadata.summary_cell and 'summarycell' not in Metadata.data:
+            Metadata.data['summarycell'] = 1
+        if 'summarycell' in Metadata.data :
+            s = Metadata.data['summarycell']
+            try:
+                cell_id = int(s) if s else 1
+            except ValueError as e:
+                print(e)
+                print("Using first cell as summary")
+                cell_id = 1
+            # Use content of the second cell as summary
+            if cell_id > 0 and nb.cells[cell_id-1].cell_type == "markdown":
+                Metadata.data['summary'] = Metadata.md.convert(
+                    nb.cells[cell_id-1].source)
         return nb, resources
 
 
@@ -95,7 +109,9 @@ pres = [('IPYNB_SUBCELLS', SubCells),
         ('IPYNB_REMOVE_EMPTY', RemoveEmpty), ]
 default_options = {'IPYNB_REMOVE_EMPTY': True,
                    'IPYNB_IGNORE': True,
-                   'IPYNB_SUBCELLS': True, }
+                   'IPYNB_SUBCELLS': True,
+                   'IPYNB_SUMMARY_CELL': False,
+                   }
 
 
 def config_pres(setting):
@@ -108,6 +124,7 @@ def config_pres(setting):
     for key in options.keys():
         if key in setting:
             options[key] = setting[key]
+    Metadata.summary_cell = options['IPYNB_SUMMARY_CELL']
     for opt, pre in pres:
         if options[opt]:
             preprocessors.append(pre)
