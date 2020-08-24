@@ -1,4 +1,4 @@
-# [ipynb2pelican](https://github.com/peijunz/ipynb2pelican) Plugin
+# Simple Jupyter Plugin for Pelican Blog System
 
 The [ipynb2pelican](https://github.com/peijunz/ipynb2pelican) plugin implements `.ipynb` file format support to pelican.
 
