@@ -38,6 +38,12 @@ class ipynbReader(BaseReader):
         summary = ""
         text = 0
         soup = BeautifulSoup(content, 'html.parser')
+        for x in soup.findAll('a', class_="anchor-link"):
+            p = x.parent
+            x.extract()
+            x.string = "#"
+            p.insert(0, " ")
+            p.insert(0, x)
         penalty = self.settings.get('CELL_PENALTY', self.DEFAULT_CELL_PENALTY)
         summary_size = self.settings.get('SUMMARY_SIZE', self.DEFAULT_SUMMARY_SIZE)
         for cell in soup.find_all('div', recursive=False):
@@ -56,4 +62,4 @@ class ipynbReader(BaseReader):
         # Change Metadata.data to standard pelican metadata
         for k, v in metadata.items():
             metadata[k] = self.process_metadata(k, v)
-        return content, metadata
+        return str(soup), metadata
