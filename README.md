@@ -61,24 +61,13 @@ performance according to the test on my blog. So all of them are enabled by defa
 ### Metadata Extraction
 As we stated, **All and Only** Metadata should be stored at the first Cell of ipynb. If there is non-metadata content found, it will raise an exception. After the extraction of metadata, the **MetaCell will be removed**, as we have extracted all the information. 
 
-#### Summary cell `IPYNB_SUMMARY_CELL`
-You could specify a jupyter cell as summary metadata of the article, which is useful in article lists. 
-The summary cell functionality is based on metadata `summarycell` in metacell. Its value tells which cell to use or do not use any cell.
+#### Summary Extration
+By default, it will generate a summary of size 600. Every extra cell incurs a penalty of 120 chars in case that there are too many small cells. 
 
-`IPYNB_SUMMARY_CELL` is __False__ by default
-+ If `IPYNB_SUMMARY_CELL` is True, then the default value of `summarycell` metadata is 1, i.e. the cell following the metadata cell
-+ If `IPYNB_SUMMARY_CELL` is False, then the default value of `summarycell` metadata is 0, i.e. disabled
-
-Use summary cell is super easy, just specify `summarycell` metadata into your metacell like this:
-```
-+ summarycell: value
-```
-If value is not specified, then it is taken as 1.
-
-### Remove Empty Cells `IPYNB_REMOVE_EMPTY`
+### Remove Empty Cells
 Remove trivial cells without visible characters using regular expression `\S`
 
-### #ignore Tag `IPYNB_IGNORE`
+### Ignore some cells
 You can include an `#ignore` comment at the beginning
 of a cell of the Jupyter notebook to ignore it, removing it from the post content.
 
@@ -102,11 +91,11 @@ The value will be evaluated by `start, end = ast.literal_eval(value)`. And then 
 
 |Option Variable|Default|Meaning|
 |------|-------|-------|
-|IPYNB_REMOVE_EMPTY|True|Remove Empty Cells|
-|IPYNB_IGNORE|True|Remove cells with `#ignore` tag at the beginning|
-|IPYNB_SUBCELLS|True|Only preserve Subcells specified by `subcells: [begin, end)` metadata|
-|IPYNB_SUMMARY_CELL|False|If `summarycell` is not in metadata, use first cell as summarycell|
-|MATHJAX_CDN|[cdnjs](https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js)|The CDN of Mathjax to use|
+|`IPYNB_REMOVE_EMPTY`|True|Remove Empty Cells|
+|`IPYNB_IGNORE`|True|Remove cells with `#ignore` tag at the beginning|
+|`IPYNB_SUBCELLS`|True|Only preserve Subcells specified by `subcells: [begin, end)` metadata|
+|`SUMMARY_SIZE` | 600 | Size of Summary|
+|`CELL_PENALTY` | 120 | penalty of each cell in summary|
 
 ## Installation and Configuration
 ### Dependency
@@ -118,8 +107,8 @@ The value will be evaluated by `start, end = ast.literal_eval(value)`. And then 
 
 It has been tested on
 
-+ `python 2.7/3.6`
-+ `pelican 3.7.1`
++ `python 3.6+`
++ `pelican 4.5`
 + `jupyter/ipython/nbconvert 4.1`
 
 ### Installation
@@ -139,7 +128,6 @@ pelicanconf.py
 pelican-plugins/
 └── ipynb2pelican
     ├── __init__.py
-    ├── math.py
     ├── preprocess.py
     ├── reader.py
     └── README.md
@@ -147,7 +135,6 @@ pelican-plugins/
 ### Configuration
 In the `pelicanconf.py`:
 ```python
-MARKUP = ('md', 'ipynb')                # Add 'ipynb'
 PLUGIN_PATH = ['pelican-plugins']       # Ensure your plugin path is in it
 PLUGINS = ['ipynb2pelican']             # Name of the plugin
 IGNORE_FILES = ['.ipynb_checkpoints']   # Prevent parsing checkpoints files
