@@ -38,14 +38,18 @@ class Metadata(Preprocessor):
     @staticmethod
     def preprocess(nb, resources):
         '''Process the notebook to extract metadata'''
-        Metadata.data = Metadata.extract_cell_metadata(nb.cells[0]['source'])
-        nb.cells = nb.cells[1:]
-        if not nb.cells:
-            raise Exception('No content cells after metadata extraction!')
+        try:
+            Metadata.data = Metadata.extract_cell_metadata(nb.cells[0]['source'])
+            nb.cells = nb.cells[1:]
+            if not nb.cells:
+                raise Exception('No content cells after metadata extraction!')
+        except MetaDataExtractionFailure:
+            Metadata.data = {'status': 'draft'}
 
         if 'summary' in Metadata.data:
             Metadata.data['summary'] = Metadata.md.convert(
                 Metadata.data['summary'])
+
         if Metadata.summary_cell and 'summarycell' not in Metadata.data:
             Metadata.data['summarycell'] = 1
         if 'summarycell' in Metadata.data :
