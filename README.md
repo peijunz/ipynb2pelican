@@ -3,18 +3,12 @@
 The [ipynb2pelican](https://github.com/peijunz/ipynb2pelican) plugin implements `.ipynb` file format support to pelican.
 
 ### Features
-+ KISS philosophy
-    + Simply convert ipynb to html, no CSS is preserved
-    + Code is simple to understand and to change
-    + Using summary generation mechanism of pelican
-+ Metadata Solution
-    + MetaCell (Metadata Cell) is the first class citizen. 
-    + Liquid tag, additional metadata file is not considered in this project
++ Simply convert ipynb to html, no CSS is preserved
++ Uses preprocessors of nbconvert library
++ Provides cell-based summary generation
++ Uses first cell as the most natural and readable metadata
 
-## MetaCell
-> **All and Only** Metadata should be stored at the first Cell of ipynb
-
-Writing a MetaCell is as simple as writing metadata in markdown file.
+Writing metadata is as simple as writing metadata in markdown file.
 ```md
 # This is title
 + date: 2020-02-22
@@ -39,7 +33,6 @@ The plugin is simple:
 
 But it is still powerful and extensible:
 
-+ Math Support
 + A Solution for metadata
 + Syntax hightlight by nbconvert
 + Several configurable preprocessors provided
@@ -59,7 +52,7 @@ Don't worry about preprocessors, switch off all options will have only 3% gain o
 performance according to the test on my blog. So all of them are enabled by default.
 
 ### Metadata Extraction
-As we stated, **All and Only** Metadata should be stored at the first Cell of ipynb. If there is non-metadata content found, it will raise an exception. After the extraction of metadata, the **MetaCell will be removed**, as we have extracted all the information. 
+As we stated, all metadata should be stored at the first cell of ipynb. If there is no metadata, then article is treated as draft and use filename as title and slug. After the extraction of metadata, the metdata cell will be removed, as we have extracted all the information. 
 
 #### Summary Extration
 By default, it will generate a summary of size 600. Every extra cell incurs a penalty of 120 chars in case that there are too many small cells. 
@@ -73,9 +66,9 @@ of a cell of the Jupyter notebook to ignore it, removing it from the post conten
 
 Note it is more strict than `#ignore` tag in pelican-ipynb. The purpose is to prevent kicking normal contents out of post content.
 
-### SubCells Selection `IPYNB_SUBCELLS`
-The Subcells preprocessor is executed after Metadata preprocessor (Th MetaCell it self will be removed by Metadata preprocessor), so
-**zeroth cell is the first cell after MetaCell**. The start and end should be written in the MetaCell like:
+### SubCells Selection
+The Subcells preprocessor is executed after Metadata preprocessor the metadate cell it self will be removed by Metadata preprocessor), so
+zeroth cell is the first cell after metadata. The start and end should be written in the metadata like:
 ```md
 # This is title
 + date: 2020-02-22
